@@ -1,0 +1,74 @@
+<html>
+    
+    <head>
+        <link rel="stylesheet" href="static/css/icecss.css" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+            学壹传媒工具箱
+        </title>
+        <style>
+        </style>
+        <script>
+        </script>
+    </head>
+    
+    <body>
+        <header class="ice-menu ice-fixed ice-menu-hover">
+            <div class="ice-menu-logo">
+                学壹传媒工具箱
+            </div>
+            <nav class="ice-main-nav">
+                <ul>
+                    <li>
+                        <a href="https://git.oschina.net/nekocode/onecampus_tools.git">
+                            Project
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#0">
+                            Home
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div class="ice-div ice-intro-big ice-center">
+            <div class="ice-center-abs" style="margin-top:100px">
+                <div class="ice-onerow">
+                    <button class="ice-button-big" id="opendoor">
+                        好好上班
+                    </button>
+                </div>
+                <div class="ice-onerow">
+                    <button class="ice-button-big" id="test">
+                        Tap it
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script src="static/js/jquery-1.11.3.min.js">
+        </script>
+        <script src="static/js/icecss.js">
+        </script>
+        <script>
+            $(document).ready(function() {
+                $("button#opendoor").click(function() {
+                    $.post("/tools/opendoor", {},
+                    function(data, status) {
+                        if (status == "success" && data == "suc") {
+                            alert("后门已经打开\n今天也要好好上班哦~");
+                        } else {
+                            alert("好像出了点问题~你可以尝试联系开发者：\nWeChat：nekocode");
+                        }
+                    });
+                });
+
+                $("button#test").click(function() {
+                    alert("这是个没有用的按钮");
+                });
+            });
+        </script>
+    </body>
+
+</html>
