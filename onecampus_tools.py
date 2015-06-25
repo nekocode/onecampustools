@@ -27,32 +27,34 @@ class OpenDoorHandler(tornado.web.RequestHandler):
 
     def login(self):
         url = 'http://www.uhomecp.com/userInfo/login.json'
-        __http = httplib2.Http()
-        response, content = __http.request(url, 'POST', headers=self.__send_headers, body=self.__login_body)
-        rlt_json = json.loads(content)
+        __http = httplib2.Http(timeout=4)
         try:
+            response, content = __http.request(url, 'POST', headers=self.__send_headers, body=self.__login_body)
+            if not response.status == "200":
+                return None
+            rlt_json = json.loads(content)
             _rlt = rlt_json['message']
             if not _rlt == u'登录成功':
                 return None
-            _rlt = rlt_json['data']['accessToken']
+            return rlt_json['data']['accessToken']
         except KeyError:
-            _rlt = None
-        return _rlt
+            return None
 
     def opendoor(self, token):
         url = 'http://www.uhomecp.com/door/openDoor.json'
         self.__send_headers['token'] = token
-        __http = httplib2.Http()
-        response, content = __http.request(url, 'POST', headers=self.__send_headers, body=self.__opendoor_body)
-        rlt_json = json.loads(content)
+        __http = httplib2.Http(timeout=4)
         try:
+            response, content = __http.request(url, 'POST', headers=self.__send_headers, body=self.__opendoor_body)
+            if not response.status == "200":
+                return False
+            rlt_json = json.loads(content)
             _rlt = rlt_json['message']
             if not _rlt == u'成功':
                 return False
-            _rlt = True
+            return True
         except KeyError:
-            _rlt = False
-        return _rlt
+            return False
 
     def post(self):
         token = self.login()
