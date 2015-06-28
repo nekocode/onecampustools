@@ -3,6 +3,7 @@
 __author__ = 'nekocode'
 
 import os
+import time
 import tornado.ioloop
 import tornado.web
 import httplib2
@@ -23,15 +24,19 @@ class OpenDoorHandler(tornado.web.RequestHandler):
 
     __login_body = "tel=13246823364&password=110110zxc"
 
-    __opendoor_body = 'communityId=385&doorIdStr=02'
+    __opendoor_body = 'communityId=385&doorIdStr='
+
+    __doors_id = {
+        "back":"02",
+        "5-up":"0550",
+        "5-down":"0551"
+    }
 
     def login(self):
         url = 'http://www.uhomecp.com/userInfo/login.json'
         __http = httplib2.Http(timeout=4)
         try:
             response, content = __http.request(url, 'POST', headers=self.__send_headers, body=self.__login_body)
-            if not response.status == "200":
-                return None
             rlt_json = json.loads(content)
             _rlt = rlt_json['message']
             if not _rlt == u'登录成功':
@@ -40,14 +45,13 @@ class OpenDoorHandler(tornado.web.RequestHandler):
         except KeyError:
             return None
 
-    def opendoor(self, token):
+    def opendoor(self, token, door_str):
         url = 'http://www.uhomecp.com/door/openDoor.json'
         self.__send_headers['token'] = token
         __http = httplib2.Http(timeout=4)
         try:
-            response, content = __http.request(url, 'POST', headers=self.__send_headers, body=self.__opendoor_body)
-            if not response.status == "200":
-                return False
+            response, content = __http.request(url, 'POST', headers=self.__send_headers,
+                                               body=self.__opendoor_body + self.__doors_id[door_str])
             rlt_json = json.loads(content)
             _rlt = rlt_json['message']
             if not _rlt == u'成功':
@@ -57,12 +61,18 @@ class OpenDoorHandler(tornado.web.RequestHandler):
             return False
 
     def post(self):
-        token = self.login()
-        if token:
-            if self.opendoor(token):
-                self.write('suc')
-            else:
-                self.write('failed')
+        door_str = self.get_argument("door")
+        seconds = int(self.get_argument("delay", "0"))
+        if door_str in self.__doors_id:
+            time.sleep(seconds)
+            token = self.login()
+            if token:
+                if self.opendoor(token, door_str):
+                    self.write('suc')
+                else:
+                    self.write('failed')
+        else:
+            self.write('failed')
 
 class MainHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
@@ -71,12 +81,20 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('index.html')
 
+class MyOpenDoorHandler(tornado.web.RequestHandler):
+    def data_received(self, chunk):
+        pass
+
+    def get(self):
+        self.render('opendoor_mine.html')
+
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static")
 }
 
 application = tornado.web.Application([
     (r"/", MainHandler),
+    (r"/tools/opendoor_mine", MyOpenDoorHandler),
     (r"/tools/opendoor", OpenDoorHandler)
 ], **settings)
 

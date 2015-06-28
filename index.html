@@ -36,7 +36,7 @@
         <div class="ice-div ice-intro-big ice-center">
             <div class="ice-center-abs" style="margin-top:100px">
                 <div class="ice-onerow">
-                    <button class="ice-button-big" id="opendoor">
+                    <button class="ice-button-big ice-button-ghost" id="opendoor">
                         好好上班
                     </button>
                 </div>
@@ -54,7 +54,9 @@
         <script>
             $(document).ready(function() {
                 $("button#opendoor").click(function() {
-                    $.post("/tools/opendoor", {},
+                    $.post("/tools/opendoor", {
+                        door: "back",
+                    },
                     function(data, status) {
                         if (status == "success" && data == "suc") {
                             alert("后门已经打开\n今天也要好好上班哦~");

@@ -1,0 +1,81 @@
+<html>
+    
+    <head>
+        <link rel="stylesheet" href="../static/css/icecss.css" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+            学壹传媒工具箱
+        </title>
+        <style>
+        </style>
+        <script>
+        </script>
+    </head>
+    
+    <body>
+        <header class="ice-menu ice-fixed ice-menu-hover">
+            <div class="ice-menu-logo">
+                学壹传媒工具箱
+            </div>
+        </header>
+        <div class="ice-div ice-intro-big ice-center">
+            <div class="ice-center-abs" style="margin-top:100px">
+                <div class="ice-onerow">
+                    <button class="ice-button-big" onclick="countDown(this,30,null,null);openDoor('5-down','30');">
+                    	打开5栋负一楼
+                    </button>
+                    </div>
+                    <div class=" ice-onerow ">
+                    <button class="ice-button-big " onclick="countDown(this,30,null,null);openDoor('5-down','30');">
+                        打开5栋大堂
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script src="../static/js/jquery-1.11.3.min.js">
+        </script>
+        <script src="../static/js/icecss.js">
+        </script>
+        <script>
+        	$.ajax({
+            	  timeout:0
+            	  /*其他配置*/
+          });
+
+            function openDoor(doorStr, delay) {
+                $.post("/tools/opendoor", {
+                	"door":doorStr,
+                	"delay":delay
+                },
+                function(data, status) {
+                    if (status == "success" && data == "suc") {
+                        alert("open suc");
+                    } else {
+                        alert("open fail");
+                    }
+                });
+            }
+
+            function countDown(obj, second, func, buttonText) {
+                if (second >= 0) {
+                    if (buttonText === null) {
+                        buttonText = obj.innerHTML;
+                    }
+                    obj.disabled = true;
+                    obj.innerHTML = buttonText + '(' + second + ')';
+                    second--;
+                    setTimeout(function() {
+                        countDown(obj, second, func, buttonText);
+                    },
+                    1000);
+                } else {
+                    obj.disabled = false;
+                    obj.innerHTML = buttonText;
+                    func();
+                }
+            }
+        </script>
+    </body>
+
+</html>
