@@ -1,7 +1,7 @@
 <html>
     
     <head>
-        <link rel="stylesheet" href="static/css/icecss.css" />
+        <link rel="stylesheet" href="static/css/icecss.mini.css" />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>
@@ -41,15 +41,13 @@
                     </button>
                 </div>
                 <div class="ice-onerow">
-                    <button class="ice-button-big" id="test">
+                    <button class="ice-button-big ice-button" id="test">
                         Tap it
                     </button>
                 </div>
             </div>
         </div>
         <script src="static/js/jquery-1.11.3.min.js">
-        </script>
-        <script src="static/js/icecss.js">
         </script>
         <script>
             $(document).ready(function() {
@@ -68,6 +66,19 @@
 
                 $("button#test").click(function() {
                     alert("这是个没有用的按钮");
+                });
+            });
+
+            jQuery(document).ready(function($) {
+                $('.ice-nav-f').append("<i class='ice-icon-sort-down'></i>");
+
+                $('.ice-main-nav').on('click',
+                function(event) {
+                    if ($(event.target).is('.ice-main-nav')) $(this).children('ul').toggleClass('is-visible');
+                });
+                
+                $(".ice-nav-accordion li").click(function() {
+                    $(this).next().toggle('slow');
                 });
             });
         </script>

@@ -27,7 +27,7 @@
                     </button>
                     </div>
                     <div class=" ice-onerow ">
-                    <button class="ice-button-big " onclick="countDown(this,30,null,null);openDoor('5-up','30');">
+                    <button class="ice-button-big " onclick="countDown(this,30,null,null);openDoor('5-down','30');">
                         打开5栋大堂
                     </button>
                 </div>
