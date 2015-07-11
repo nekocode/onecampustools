@@ -17,7 +17,7 @@ class OpenDoorHandler(tornado.web.RequestHandler):
         'Host': 'www.uhomecp.com',
         'Content-Type': 'application/x-www-form-urlencoded',
         'source': '4',
-        'version': '3.1',
+        'version': '3.2',
         'Connection': 'Keep-Alive',
         'User-Agent': 'uhome_app'
     }
@@ -27,9 +27,9 @@ class OpenDoorHandler(tornado.web.RequestHandler):
     __opendoor_body = 'communityId=385&doorIdStr='
 
     __doors_id = {
-        "back":"02",
-        "5-up":"0550",
-        "5-down":"0551"
+        "back": "02",
+        "5-up": "0550",
+        "5-down": "0551"
     }
 
     def login(self):
@@ -74,6 +74,20 @@ class OpenDoorHandler(tornado.web.RequestHandler):
         else:
             self.write('failed')
 
+    def get(self):
+        door_str = self.get_argument("door")
+        seconds = int(self.get_argument("delay", "0"))
+        if door_str in self.__doors_id:
+            time.sleep(seconds)
+            token = self.login()
+            if token:
+                if self.opendoor(token, door_str):
+                    self.write('suc')
+                else:
+                    self.write('failed')
+        else:
+            self.write('failed')
+
 class MainHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
         pass
@@ -101,3 +115,5 @@ application = tornado.web.Application([
 if __name__ == "__main__":
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
+
+
