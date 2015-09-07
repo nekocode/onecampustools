@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = 'nekocode'
 
 import os
 import time
@@ -8,6 +7,9 @@ import tornado.ioloop
 import tornado.web
 import httplib2
 import json
+import bus_check
+__author__ = 'nekocode'
+
 
 class OpenDoorHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
@@ -88,12 +90,14 @@ class OpenDoorHandler(tornado.web.RequestHandler):
         else:
             self.write('failed')
 
+
 class MainHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
         pass
 
     def get(self):
         self.render('index.html')
+
 
 class MyOpenDoorHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
@@ -102,6 +106,56 @@ class MyOpenDoorHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('opendoor_mine.html')
 
+
+class CheckBusHandler(tornado.web.RequestHandler):
+    def data_received(self, chunk):
+        pass
+
+    def get(self):
+        # self.write('<meta name="viewport" content="width=device-width, initial-scale=1"/>')
+        self.write('<title>公交查询</title>')
+        hour = time.strftime('%H', time.localtime())
+        if hour < 13:
+        	self.write('<table border="1" cellpadding="10" width="100%"><tr><th>大学城专线 1(去上班)</th><th>大学城专线 2(去上班)</th></tr>')
+        else:
+            self.write('<table border="1" cellpadding="10" width="100%"><tr><th>大学城专线 1(回家)</th><th>大学城专线 2(回家)</th></tr>')
+
+        bus_data = bus_check.get_bus_data()
+        for i in range(max(len(bus_data[0]), len(bus_data[1]))):
+            if i < len(bus_data[0]):
+                data1 = bus_data[0][i]
+            else:
+                data1 = '&nbsp;'
+            if data1.find(u'科韵路棠安路口站') != -1 or data1.find(u'综合商业南区站') != -1:
+                self.write('<tr><td bgcolor="red">')
+                self.write('<font style="font-weight:bold;color:white">')
+                self.write(data1)
+                self.write('</font>')
+                self.write('</td>')
+            else:
+                self.write('<tr><td>')
+                self.write(data1)
+                self.write('</td>')
+
+            if i < len(bus_data[1]):
+                data2 = bus_data[1][i]
+            else:
+                data2 = '&nbsp;'
+            if data2.find(u'科韵路棠安路口站') != -1 or data2.find(u'综合商业南区站') != -1:
+                self.write('<td bgcolor="red">')
+                self.write('<font style="font-weight:bold;color:white">')
+                self.write(data2)
+                self.write('</font>')
+                self.write('</td></tr>')
+            else:
+                self.write('<td>')
+                self.write(data2)
+                self.write('</td></tr>')
+
+        self.write('</table>')
+        self.write('<button style="font-size:40px;color:#FFF;background-color:#888;border:1px solid #E3E9E9;border-radius: 20px;position:fixed;right:15px;bottom:15px;padding-top:60px;padding-bottom:60px;padding-left:100px;padding-right:100px;" onclick="location.reload()">刷新</button>')
+
+
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static")
 }
@@ -109,7 +163,8 @@ settings = {
 application = tornado.web.Application([
     (r"/", MainHandler),
     (r"/tools/opendoor_mine", MyOpenDoorHandler),
-    (r"/tools/opendoor", OpenDoorHandler)
+    (r"/tools/opendoor", OpenDoorHandler),
+    (r"/bus", CheckBusHandler)
 ], **settings)
 
 if __name__ == "__main__":
