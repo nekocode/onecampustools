@@ -113,24 +113,23 @@ class CheckBusHandler(tornado.web.RequestHandler):
 
     def get(self):
         # self.write('<meta name="viewport" content="width=device-width, initial-scale=1"/>')
-        self.write('<title>公交查询</title>')
-        hour = time.strftime('%H', time.localtime())
+        self.write('<title>公交查询</title><style>body{background:#22292C;color:#fff}</style>')
+        hour = int(time.strftime('%H', time.localtime()))
         if hour < 13:
-        	self.write('<table border="1" cellpadding="10" width="100%"><tr><th>大学城专线 1(去上班)</th><th>大学城专线 2(去上班)</th></tr>')
+        	self.write('<table cellpadding="10" width="100%" onclick="location.reload()"><tr><th>大学城专线 1(去上班)</th><th>大学城专线 2(去上班)</th></tr>')
         else:
-            self.write('<table border="1" cellpadding="10" width="100%"><tr><th>大学城专线 1(回家)</th><th>大学城专线 2(回家)</th></tr>')
+            self.write('<table cellpadding="10" width="100%" onclick="location.reload()"><tr><th>大学城专线 1(回家)</th><th>大学城专线 2(回家)</th></tr>')
 
         bus_data = bus_check.get_bus_data()
+        bus_img = '<img src="/static/img/bus.svg"/>'
         for i in range(max(len(bus_data[0]), len(bus_data[1]))):
             if i < len(bus_data[0]):
-                data1 = bus_data[0][i]
+                data1 = (bus_data[0][i]).replace(u'→', bus_img)
             else:
                 data1 = '&nbsp;'
-            if data1.find(u'科韵路棠安路口站') != -1 or data1.find(u'综合商业南区站') != -1:
-                self.write('<tr><td bgcolor="red">')
-                self.write('<font style="font-weight:bold;color:white">')
+            if (data1.find(u'科韵路棠安路口站') != -1 and  hour >= 13) or (data1.find(u'综合商业南区站') != -1 and hour < 13):
+                self.write('<tr><td bgcolor="#0099CC">')
                 self.write(data1)
-                self.write('</font>')
                 self.write('</td>')
             else:
                 self.write('<tr><td>')
@@ -138,14 +137,12 @@ class CheckBusHandler(tornado.web.RequestHandler):
                 self.write('</td>')
 
             if i < len(bus_data[1]):
-                data2 = bus_data[1][i]
+                data2 = (bus_data[1][i]).replace(u'→', bus_img)
             else:
                 data2 = '&nbsp;'
-            if data2.find(u'科韵路棠安路口站') != -1 or data2.find(u'综合商业南区站') != -1:
-                self.write('<td bgcolor="red">')
-                self.write('<font style="font-weight:bold;color:white">')
+            if (data2.find(u'科韵路棠安路口站') != -1 and  hour >= 13) or (data2.find(u'综合商业南区站') != -1 and hour < 13):
+                self.write('<td bgcolor="#0099CC">')
                 self.write(data2)
-                self.write('</font>')
                 self.write('</td></tr>')
             else:
                 self.write('<td>')
@@ -153,8 +150,8 @@ class CheckBusHandler(tornado.web.RequestHandler):
                 self.write('</td></tr>')
 
         self.write('</table>')
-        self.write('<button style="font-size:40px;color:#FFF;background-color:#888;border:1px solid #E3E9E9;border-radius: 20px;position:fixed;right:15px;bottom:15px;padding-top:60px;padding-bottom:60px;padding-left:100px;padding-right:100px;" onclick="location.reload()">刷新</button>')
-
+        # self.write('<button style="font-size:40px;color:#FFF;background-color:#888;border:1px solid #E3E9E9;border-radius: 20px;position:fixed;right:15px;bottom:15px;padding-top:60px;padding-bottom:60px;padding-left:100px;padding-right:100px;" onclick="location.reload()">刷新</button>')
+        
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static")

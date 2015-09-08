@@ -25,18 +25,18 @@ def deal_page(page):
 
         station_name = li.find('div', {'class': 'station'}).text
         if flag == 0:
-            _bus_data.append(u'　　　' + station_name)
+            _bus_data.append(u'　　' + station_name)
         elif flag == 1:
-            _bus_data.append(u'－》　' + station_name)
+            _bus_data.append(u'→　' + station_name)
         elif flag == 2:
-            _bus_data.append(u'　　　' + station_name)
-            _bus_data.append(u'－》　')
+            _bus_data.append(u'　　' + station_name)
+            _bus_data.append(u'→　')
 
     return _bus_data
 
 
 def get_bus_data():
-    hour = time.strftime('%H', time.localtime())
+    hour = int(time.strftime('%H', time.localtime()))
     urls = ['http://m.tool.finded.net/index.php?m=Bus&c=Bus&a=refresh&l=kcRiyrpC-1x3qA-3xJcEGuSolw-2x-2x%2F',
             'http://m.tool.finded.net/index.php?m=Bus&c=Bus&a=refresh&l=hK1PjB4ragFWS30H-3xqJZCw-2x-2x%2F']
     bus_data = []
