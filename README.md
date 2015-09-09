@@ -10,4 +10,4 @@
 - 待续..
 
 ###live website
-http://1.onecampustools.sinaapp.com/
+http://1.onecampustools.sinaapp.com/  **(手机上打开)**
