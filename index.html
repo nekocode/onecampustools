@@ -1,86 +1,80 @@
 <html>
     
     <head>
-        <link rel="stylesheet" href="static/css/icecss.mini.css" />
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>
-            学壹传媒工具箱
-        </title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <title>学壹传媒工具箱</title>
         <style>
+            body{background:#22292C}.bluebutton{background:none repeat scroll 0 0#0099CC;border-radius:3px
+            3px 3px 3px;color:#FFFFFF;padding:25px 35px}.bluebutton:active{background-color:#336699;box-shadow:0
+            2px 2px rgba(0,0,0,0.25)inset;padding:21px 35px 19px}
         </style>
-        <script>
-        </script>
     </head>
     
     <body>
-        <header class="ice-menu ice-fixed ice-menu-hover">
-            <div class="ice-menu-logo">
-                学壹传媒工具箱
-            </div>
-            <nav class="ice-main-nav">
-                <ul>
-                    <li>
-                        <a href="https://git.oschina.net/nekocode/onecampus_tools.git">
-                            Project
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#0">
-                            Home
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-        <div class="ice-div ice-intro-big ice-center">
-            <div class="ice-center-abs" style="margin-top:100px">
-                <div class="ice-onerow">
-                    <button class="ice-button-big ice-button-ghost" id="opendoor">
-                        好好上班
-                    </button>
-                </div>
-                <div class="ice-onerow">
-                    <button class="ice-button-big ice-button" id="test">
-                        Tap it
-                    </button>
-                </div>
-            </div>
+        <div style="text-align:center;margin-top:126px;">
+            <a class="bluebutton" href="#" onclick="openDoor();">
+                Open the door
+            </a>
         </div>
-        <script src="static/js/jquery-1.11.3.min.js">
+        <div style="text-align:center;margin-top:60px;">
+            <a class="bluebutton" href="/bus">
+                Bus Timetable
+            </a>
+        </div>
+        <div style="text-align:center;position:absolute;bottom:20px;width:200px;display:block;left:50%;margin-left:-100px;">
+            <a href="/donate" style="color:#fff;">
+                Donate to the developer~
+            </a>
+        </div>
+        <script>
+            !
+            function(e, t) {
+                function n() {
+                    if (t.XMLHttpRequest) return new t.XMLHttpRequest;
+                    try {
+                        return new t.ActiveXObject("MSXML2.XMLHTTP.3.0")
+                    } catch(e) {}
+                    throw new Error("no xmlhttp request able to be created")
+                }
+                function r(e, t, n) {
+                    e[t] = e[t] || n
+                }
+                t.nanoajax = e,
+                e.ajax = function(e, t) {
+                    "string" == typeof e && (e = {
+                        url: e
+                    });
+                    var a = e.headers || {},
+                    o = e.body,
+                    u = e.method || (o ? "POST": "GET"),
+                    i = e.withCredentials || !1,
+                    s = n();
+                    s.onreadystatechange = function() {
+                        4 == s.readyState && t(s.status, s.responseText, s)
+                    },
+                    o && (r(a, "X-Requested-With", "XMLHttpRequest"), r(a, "Content-Type", "application/x-www-form-urlencoded")),
+                    s.open(u, e.url, !0),
+                    s.withCredentials = i;
+                    for (var c in a) s.setRequestHeader(c, a[c]);
+                    s.send(o)
+                }
+            } ({},
+            function() {
+                return this
+            } ());
         </script>
         <script>
-            $(document).ready(function() {
-                $("button#opendoor").click(function() {
-                    $.post("/tools/opendoor", {
-                        door: "back",
-                    },
-                    function(data, status) {
-                        if (status == "success" && data == "suc") {
-                            alert("后门已经打开\n今天也要好好上班哦~");
-                        } else {
-                            alert("好像出了点问题~你可以尝试联系开发者：\nWeChat：nekocode");
-                        }
-                    });
-                });
-
-                $("button#test").click(function() {
-                    alert("这是个没有用的按钮");
-                });
-            });
-
-            jQuery(document).ready(function($) {
-                $('.ice-nav-f').append("<i class='ice-icon-sort-down'></i>");
-
-                $('.ice-main-nav').on('click',
-                function(event) {
-                    if ($(event.target).is('.ice-main-nav')) $(this).children('ul').toggleClass('is-visible');
-                });
-                
-                $(".ice-nav-accordion li").click(function() {
-                    $(this).next().toggle('slow');
-                });
-            });
+            function openDoor() {
+                nanoajax.ajax("/tools/opendoor?door=back",
+                function(code, responseText) {
+                    if (responseText == "suc") {
+                        alert("后门已经打开\n今天也要好好上班哦~")
+                    } else {
+                        alert("好像出了点问题~你可以尝试联系开发者：\nWeChat：nekocode")
+                    }
+                })
+            }
         </script>
     </body>
 

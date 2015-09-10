@@ -1,0 +1,4 @@
+name: onecampustools
+version: 1
+
+worker: tornado

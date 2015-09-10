@@ -1,0 +1,28 @@
+<title>我们来给穷人捐款吧~</title>
+<style>
+            body{background:#22292C}
+        </style>
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<script type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/static/js/qrcode.min.js"></script>
+
+<div style="text-align:center;margin-top:112px;">
+	<div id="qrcode" style="width:256px; height:256px;margin-left:auto;margin-right:auto;"></div>
+</div>
+
+<div style="text-align:center;margin-top:14px;">
+    <a style="color:#fff">草泥马在某个戈壁上找到了几毛钱<br>✪ω✪</a>
+</div>    
+
+    
+<script type="text/javascript">
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+	width : 256,
+	height : 256,
+    colorDark : "#22292C",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+});
+qrcode.makeCode("https://wx.tenpay.com/f2f?t=AQAAAJgTgDfu9P4m3kc%2FWrYXDhE%3D");
+</script>

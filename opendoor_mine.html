@@ -2,7 +2,7 @@
     
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
         <title>5栋开门工具</title>
         <style>
 </style>
@@ -11,13 +11,13 @@
     </head>
     
     <body>
-        <button onclick="countDown(this,30,null,null);openDoor('5-down','30');">打开5栋负一楼</button>
-        <button onclick="countDown(this,30,null,null);openDoor('5-up','30');">打开5栋大堂</button>
+        <button style="padding:25px 35px" onclick="countDown(this,50,null,null);openDoor('5-down','50');">打开5栋负一楼</button>
+        <button style="padding:25px 35px" onclick="countDown(this,50,null,null);openDoor('5-up','50');">打开5栋大堂</button>
         <script src="../static/js/nanoajax.min.js">
 </script>
         <script>
             function openDoor(doorStr, delay) {
-                nanoajax.ajax("/tools/opendoor?door=" + doorStr + "&delay=" + delay, 
+                nanoajax.ajax("opendoor?door=" + doorStr + "&delay=" + delay, 
                     function (code, responseText) {
                         if(responseText == "suc") {
                             alert("open suc")
@@ -41,7 +41,6 @@
                 } else {
                     obj.disabled = false;
                     obj.innerHTML = buttonText;
-                    func()
                 }
             }
         </script>
