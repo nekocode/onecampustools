@@ -9,6 +9,8 @@ import httplib2
 import json
 import bus_check
 import time
+import judge
+import problemset.problems
 
 class OpenDoorHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
@@ -166,5 +168,12 @@ application = tornado.web.Application([
     (r"/tools/opendoor_mine", MyOpenDoorHandler),
     (r"/tools/opendoor", OpenDoorHandler),
     (r"/bus", CheckBusHandler),
-    (r"/donate", DonateHandler)
+    (r"/donate", DonateHandler),
+    
+    (r'/judge/', judge.JudgeHandler),
+    (r'/judge/' + problemset.problems.key1, problemset.problems.Problem1Handler),
+    (r'/judge/' + problemset.problems.key3, problemset.problems.Problem3Handler),
+    (r'/judge/' + problemset.problems.key4, problemset.problems.Problem4Handler),
+    (r'/judge/' + problemset.problems.key5, problemset.problems.Problem5Handler),
+    (r'/judge/' + problemset.problems.key6, problemset.problems.Problem6Handler)
 ], **settings)
